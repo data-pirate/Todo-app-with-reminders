@@ -51,11 +51,11 @@
         <div
           class="collapse navbar-collapse flex-grow items-center"
           id="navbarSupportedContent1"
-        >
+          >
           <a class="text-xl text-white pr-2 font-semibold" href="#">Todo App</a>
         </div>
         <!-- Collapsible wrapper -->
-
+        
         <!-- Right elements -->
         <div class="flex items-center relative">
           <div class="dropdown relative">
@@ -78,7 +78,7 @@
           </div>
 
           <div class="logout">
-            <a href="#" class="mx-2 py-2 text-right text-white">Logout</a>
+            <a href="/logout" class="mx-2 py-2 text-right text-white">Logout</a>
           </div>
         </div>
         <!-- Right elements -->
@@ -178,7 +178,6 @@
                         id="time-picker"
                         class="form-control bg-gray-200 block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                         placeholder="Select a date"
-                        data-mdb-toggle="input-toggle-timepicker"
                       />
                     </div>
                   </div>
@@ -194,6 +193,7 @@
                     <button
                       type="button"
                       class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded-lg shadow-sm"
+                      id = "save-event"
                     >
                       Save Event
                     </button>

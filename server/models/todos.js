@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const todoSchema = new Schema({
     user_id: mongoose.Types.ObjectId,
-    todos: Array,
-    completed: Array
+    todos: {type: Array, default: []},
+    completed: {type: Array, default: []}
 })
 
-module.exports = mongoose.model("todos", todoSchema);
+module.exports = Todo = mongoose.model("todos", todoSchema);
