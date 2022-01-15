@@ -1,75 +1,93 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const passport = require("passport");
-const session = require("express-session");
-require("./modules/auth");
-const dotenv = require("dotenv");
-const isLoggedIn = require("./middlewares/loggedIn");
-const bodyParser = require("body-parser");
-const cookieSession = require("cookie-session");
-const reminderRoute = require('./routes/reminder')
+/**
+ * Main server file
+ */
+const express = require('express');
+const mongoose = require('mongoose');
+const passport = require('passport');
+const cookieSession = require('cookie-session');
+const bodyParser = require('body-parser');
+require('./modules/auth');
+const dotenv = require('dotenv');
+const isLoggedIn = require('./middlewares/loggedIn');
+const reminderRoute = require('./routes/reminder');
+const log = require('log-to-file');
+
+// configuration to use enviornment variables
 dotenv.config();
 
+// connection to database
 mongoose.connect(process.env.DB_LINK, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 let db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
+db.on('error', (err) =>
+    log('index js(database error) ' + err, 'errorFile.log')
+);
 
 const app = express();
 
 // app configuration
-app.use(bodyParser.json())
-app.use(express.static(__dirname + "/client"));
+// server css and js to client
+app.use(express.static(__dirname + '/client'));
+app.use(bodyParser.json());
 app.use(
-  session({
-    secret: process.env.EXPRESS_SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
+    cookieSession({
+        name: 'google-auth-session',
+        maxAge: 24 * 60 * 60 * 100,
+        keys: [process.env.COOKIE_SECRET]
+    })
 );
+// initialize session
 app.use(passport.initialize());
 app.use(passport.session());
 
 //   app configuration ends
-
 app.use('/reminder', reminderRoute);
 
-app.get('/', (req, res)=>{
-	res.redirect('/auth')
-})
-
-app.get("/dashboard", isLoggedIn, (req, res) => {
-	res.sendFile(__dirname + "/client/index.html", {userId: req.user._id});
+/**
+ * home route if user is logged in
+ * will be redirected to the dashboard
+ */
+app.get('/', isLoggedIn, (req, res) => {
+    res.redirect('/dashboard');
 });
 
-// app.get("/protected", (req, res) => {
-//   res.send("ehell");
-// });
-
-app.get("/auth", (req, res) => {
-  res.sendFile(__dirname + "/client/auth.html");
+// login route
+app.get('/auth', (req, res) => {
+    res.sendFile(__dirname + '/client/auth.html');
 });
 
-// login and sign up
+// todos and other will be shown here
+app.get('/dashboard', isLoggedIn, (req, res) => {
+    res.sendFile(__dirname + '/client/home.html');
+});
+
+// to get info about the user
+app.get('/user', isLoggedIn, (req, res) => {
+    res.send({ ...req.user._doc });
+});
+
+// google login and sign up
 app.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+    '/auth/google',
+    passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 app.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/auth" }),
-  (req, res) => {
-    // Successful authentication, redirect home.
-    res.redirect("/dashboard");
-  }
+    '/auth/google/callback',
+    passport.authenticate('google', {
+        successRedirect: '/dashboard',
+        failureRedirect: '/'
+    })
 );
 
+// destroy session and logout
+app.get('/logout', (req, res) => {
+    req.logOut();
+    req.session = null;
+    res.redirect('/auth');
+});
 
-app.get('/logout', (req, res)=>{
-	req.logOut();
-	res.redirect('/auth')
-})
-
-app.listen(8000, () => console.log("server running on: 8000"));
+app.listen(process.env.PORT, () =>
+    console.log(`server running on: ${process.env.PORT}`)
+);

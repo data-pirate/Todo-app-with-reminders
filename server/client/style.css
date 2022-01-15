@@ -1,23 +1,27 @@
-.logo{
+.logo {
     height: 30px;
     width: 30px;
     margin: 0 0.4em;
 }
 
-.custom-input{
-    border:none;
+.custom-input {
+    border: none;
     background: rgb(226, 226, 226);
     border-bottom: 2px solid rgb(37 99 235);
 }
 
-.edit-logo{
-    height: 24px
+.edit-logo {
+    height: 24px;
 }
 
-.bg-green-500{
+.bg-green-500 {
     background: #22c55e;
 }
 
-input[type="radio"]:checked{
+input[type='radio']:checked {
     border: #22c55e 10px solid;
+}
+
+.bold {
+    font-weight: 500;
 }

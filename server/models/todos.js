@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 
+// schema for todo
 const todoSchema = new Schema({
     user_id: mongoose.Types.ObjectId,
-    todos: {type: Array, default: []},
-    completed: {type: Array, default: []}
-})
+    // array of todos to be completed
+    todos: { type: Array, default: [] }
+});
 
-module.exports = Todo = mongoose.model("todos", todoSchema);
+module.exports = Todo = mongoose.model('todos', todoSchema);

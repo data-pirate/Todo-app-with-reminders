@@ -1,24 +1,41 @@
-var nodemailer = require('nodemailer');
+const nodemailer = require('nodemailer');
+const log = require('log-to-file');
 
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'youremail@gmail.com',
-    pass: 'yourpassword'
-  }
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.MY_MAIL,
+        pass: process.env.MAIL_PASS
+    }
 });
 
-var mailOptions = {
-  from: 'youremail@gmail.com',
-  to: 'myfriend@yahoo.com',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
+const mailOptions = {
+    from: process.env.MY_MAIL,
+    to: 'myfriend@yahoo.com',
+    subject: 'Reminder for Todo',
+    text: 'That was easy!'
 };
 
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-});
+/**
+ * requests user's email and composes the mail
+ * @param {Object} param
+ */
+function send({ email, content }) {
+    mailOptions.to = email;
+    mailOptions.text = content;
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            // log if there is any error
+            log('Notifier module' + error, 'errorFile.log');
+        } else {
+            // log info about mail sent
+            log(
+                'Email sent: ' + info.response + ' \nsent to : ' + email,
+                'sent-mails.log'
+            );
+        }
+    });
+}
+
+module.exports = send;
