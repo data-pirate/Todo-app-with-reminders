@@ -1,6 +1,6 @@
 ## Todo with reminders
 
-[![Todo with reminders Screen Shot][product-screenshot]]
+<img src = "server/images/screenshot.png" style="width: 100%;" />
 
 A node js project to remind you about your todos, to be completed over the email.
 Sounds fun, Right !
