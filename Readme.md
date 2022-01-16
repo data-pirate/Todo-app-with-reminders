@@ -41,7 +41,7 @@ This is an example of how to list things you need to use the software and how to
    ```
 4. Run the app
     ```js
-    npm run dev
+    npm start
     ```
 
 ## Contributing
