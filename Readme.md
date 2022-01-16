@@ -1,6 +1,6 @@
 ## Todo with reminders
 
-<img src = "server/images/screenshot.png" style="width: 100%;" />
+<img src = "images/screenshot.png" style="width: 100%;" />
 
 A node js project to remind you about your todos, to be completed over the email.
 Sounds fun, Right !
@@ -12,7 +12,7 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
+list of things you need to use the software.
 * npm
   ```sh
   npm install npm@latest -g
